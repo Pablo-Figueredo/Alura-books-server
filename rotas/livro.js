@@ -5,18 +5,10 @@ const router = express.Router();
 const controller = new livroController();
 
 router
- .get('/livros', controller.getLivros);
-
-router.post('/livros', (req, res) => {
-  res.send('Você está criando um novo livro!');
-});
-
-router.patch('/livros', (req, res) => {
-  res.send('Você está atualizando um livro!');
-});
-
-router.delete('/livros', (req, res) => {
-  res.send('Você está deletando um livro!');
-}); 
+ .get('/livros', controller.getLivros)
+ .get('/livros/:id', controller.getLivroById) 
+ .post('/livros', controller.postLivro)
+ .patch('/livros/:id', controller.patchLivro)
+ .delete('/livros/:id', controller.deleteLivro); 
 
 export default router;
