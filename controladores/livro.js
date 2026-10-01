@@ -17,33 +17,32 @@ class livroController {
     getLivroById(req, res) {
     try {
         const id = Number(req.params.id);
-
         if (Number.isNaN(id)) {
-            res.status(400).send('Id inválido');
-            return;
+            return res.status(422).send('Id inválido');
         }
 
         const livro = servico.getTodosLivros().find(livro => livro.id === id);
-
         if (!livro) {
-            res.status(404).send('Livro não encontrado');
-            return;
+            return res.status(404).send('Livro não encontrado');
         }
 
         return res.status(200).send(livro);
-
     } catch (error) {
-        res.status(500).send(error);
+        return res.status(500).send(error.message);
     }
 }
     
     postLivro(req, res) {
     try {
         const livroNovo = req.body;
+        if (!livroNovo?.titulo) {
+            return res.status(422).send('O campo titulo é obrigatório');
+        }
+
         servico.insereLivro(livroNovo);
-        res.status(201).send(livroNovo);
+        return res.status(201).send(livroNovo);
     } catch (error) {
-        res.status(500).send(error);
+        return res.status(500).send(error.message);
     }
 }
 
@@ -51,7 +50,7 @@ class livroController {
     try {
         const id = Number(req.params.id);
         if (Number.isNaN(id)) {
-            return res.status(400).send('Id inválido');
+            return res.status(422).send('Id inválido');
         }
 
         const livro = servico.atualizaLivro(id, req.body);
@@ -59,9 +58,8 @@ class livroController {
             return res.status(404).send('Livro não encontrado');
         }
         return res.status(200).send(livro);
-    }
-   catch (error) {
-        res.status(500).send(error);
+    } catch (error) {
+        return res.status(500).send(error.message);
     }
 }
 
@@ -69,7 +67,7 @@ deleteLivro(req, res) {
     try {
         const id = Number(req.params.id);
         if (Number.isNaN(id)) {
-            return res.status(400).send('Id inválido');
+            return res.status(422).send('Id inválido');
         }
 
         const livro = servico.excluiLivro(id);
@@ -78,7 +76,7 @@ deleteLivro(req, res) {
         }
         return res.status(200).send(livro);
     } catch (error) {
-        res.status(500).send(error);
+        return res.status(500).send(error.message);
     }
 }
 
